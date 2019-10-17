@@ -15,7 +15,7 @@ from collections import namedtuple
 import numpy as np
 from astropy.modeling.core import Model
 from astropy.modeling.parameters import Parameter, InputParameterError
-from astropy.modeling.models import Rotation2D
+from astropy.modeling import rotations # Rotation2D
 from astropy.utils import isiterable
 
 
@@ -151,6 +151,7 @@ class GrismObject(namedtuple('GrismObject', ("sid",
                         str(self.partial_order),
                         str(self.waverange)))
 
+V23ToSky = rotations.SphericalRotationSequence
 
 class MIRI_AB2Slice(Model):
     """
@@ -556,110 +557,109 @@ class Rotation3DToGWA(Model):
         return x, y, z
 
 
-class Rotation3D(Model):
-    """
-    Perform a series of rotations about different axis in 3D space.
 
-    Positive angles represent a counter-clockwise rotation.
-
-    Parameters
-    ----------
-    angles : array-like
-        Angles of rotation in deg in the order of axes_order.
-    axes_order : str
-        A sequence of 'x', 'y', 'z' corresponding of axis of rotation.
-    """
-    standard_broadcasting = False
-    _separable = False
-
-    n_inputs = 3
-    n_outputs = 3
-
-    angles = Parameter(getter=np.rad2deg, setter=np.deg2rad)
-
-    def __init__(self, angles, axes_order, name=None):
-        self.axes = ['x', 'y', 'z']
-        unrecognized = set(axes_order).difference(self.axes)
-        if unrecognized:
-            raise ValueError("Unrecognized axis label {0}; "
-                             "should be one of {1} ".format(unrecognized,
-                                                            self.axes))
-        self.axes_order = axes_order
-        if len(angles) != len(axes_order):
-            raise ValueError("The number of angles {0} should match the number \
-                              of axes {1}.".format(len(angles),
-                                                   len(axes_order)))
-        super(Rotation3D, self).__init__(angles, name=name)
-        self.inputs = ('x', 'y', 'z')
-        self.outputs = ('x', 'y', 'z')
-
-
-    @property
-    def inverse(self):
-        """Inverse rotation."""
-        angles = self.angles.value[::-1] * -1
-        return self.__class__(angles, axes_order=self.axes_order[::-1])
-
-    @staticmethod
-    def _compute_matrix(angles, axes_order):
-        if len(angles) != len(axes_order):
-            raise InputParameterError(
-                "Number of angles must equal number of axes in axes_order.")
-        matrices = []
-        for angle, axis in zip(angles, axes_order):
-            matrix = np.zeros((3, 3), dtype=np.float)
-            if axis == 'x':
-                mat = Rotation3D.rotation_matrix_from_angle(angle)
-                matrix[0, 0] = 1
-                matrix[1:, 1:] = mat
-            elif axis == 'y':
-                mat = Rotation3D.rotation_matrix_from_angle(-angle)
-                matrix[1, 1] = 1
-                matrix[0, 0] = mat[0, 0]
-                matrix[0, 2] = mat[0, 1]
-                matrix[2, 0] = mat[1, 0]
-                matrix[2, 2] = mat[1, 1]
-            elif axis == 'z':
-                mat = Rotation3D.rotation_matrix_from_angle(angle)
-                matrix[2, 2] = 1
-                matrix[:2, :2] = mat
-            else:
-                raise ValueError("Expected axes_order to be a combination \
-                        of characters 'x', 'y' and 'z', got {0}".format(
-                                     set(axes_order).difference(['x', 'y', 'z'])))
-            matrices.append(matrix)
-        if len(angles) == 1:
-            return matrix
-        elif len(matrices) == 2:
-            return np.dot(matrices[1], matrices[0])
-        else:
-            prod = np.dot(matrices[1], matrices[0])
-            for m in matrices[2:]:
-                prod = np.dot(m, prod)
-            return prod
-
-    @staticmethod
-    def rotation_matrix_from_angle(angle):
-        """
-        Clockwise rotation matrix.
-        """
-        return np.array([[math.cos(angle), -math.sin(angle)],
-                         [math.sin(angle), math.cos(angle)]])
-
-    def evaluate(self, x, y, z, angles):
-        """
-        Apply the rotation to a set of 3D Cartesian coordinates.
-        """
-        if x.shape != y.shape != z.shape:
-            raise ValueError("Expected input arrays to have the same shape")
-        # Note: If the original shape was () (an array scalar) convert to a
-        # 1-element 1-D array on output for consistency with most other models
-        orig_shape = x.shape or (1,)
-        inarr = np.array([x.flatten(), y.flatten(), z.flatten()])
-        result = np.dot(self._compute_matrix(angles[0], self.axes_order), inarr)
-        x, y, z = result[0], result[1], result[2]
-        x.shape = y.shape = z.shape = orig_shape
-        return x, y, z
+# class Rotation3D(Model):
+#     """
+#     Perform a series of rotations about different axis in 3D space.
+#
+#     Positive angles represent a counter-clockwise rotation.
+#
+#     Parameters
+#     ----------
+#     angles : array-like
+#         Angles of rotation in deg in the order of axes_order.
+#     axes_order : str
+#         A sequence of 'x', 'y', 'z' corresponding of axis of rotation.
+#     """
+#     standard_broadcasting = False
+#     _separable = False
+#
+#     inputs = ('x', 'y', 'z')
+#     outputs = ('x', 'y', 'z')
+#
+#     angles = Parameter(getter=np.rad2deg, setter=np.deg2rad)
+#
+#     def __init__(self, angles, axes_order, name=None):
+#         self.axes = ['x', 'y', 'z']
+#         unrecognized = set(axes_order).difference(self.axes)
+#         if unrecognized:
+#             raise ValueError("Unrecognized axis label {0}; "
+#                              "should be one of {1} ".format(unrecognized,
+#                                                             self.axes))
+#         self.axes_order = axes_order
+#         if len(angles) != len(axes_order):
+#             raise ValueError("The number of angles {0} should match the number \
+#                               of axes {1}.".format(len(angles),
+#                                                    len(axes_order)))
+#         super(Rotation3D, self).__init__(angles, name=name)
+#
+#     @property
+#     def inverse(self):
+#         """Inverse rotation."""
+#         angles = self.angles.value[::-1] * -1
+#         return self.__class__(angles, axes_order=self.axes_order[::-1])
+#
+#     @staticmethod
+#     def _compute_matrix(angles, axes_order):
+#         if len(angles) != len(axes_order):
+#             raise InputParameterError(
+#                 "Number of angles must equal number of axes in axes_order.")
+#         matrices = []
+#         for angle, axis in zip(angles, axes_order):
+#             matrix = np.zeros((3, 3), dtype=np.float)
+#             if axis == 'x':
+#                 mat = Rotation3D.rotation_matrix_from_angle(angle)
+#                 matrix[0, 0] = 1
+#                 matrix[1:, 1:] = mat
+#             elif axis == 'y':
+#                 mat = Rotation3D.rotation_matrix_from_angle(-angle)
+#                 matrix[1, 1] = 1
+#                 matrix[0, 0] = mat[0, 0]
+#                 matrix[0, 2] = mat[0, 1]
+#                 matrix[2, 0] = mat[1, 0]
+#                 matrix[2, 2] = mat[1, 1]
+#             elif axis == 'z':
+#                 mat = Rotation3D.rotation_matrix_from_angle(angle)
+#                 matrix[2, 2] = 1
+#                 matrix[:2, :2] = mat
+#             else:
+#                 raise ValueError("Expected axes_order to be a combination \
+#                         of characters 'x', 'y' and 'z', got {0}".format(
+#                                      set(axes_order).difference(['x', 'y', 'z'])))
+#             matrices.append(matrix)
+#         if len(angles) == 1:
+#             return matrix
+#         elif len(matrices) == 2:
+#             return np.dot(matrices[1], matrices[0])
+#         else:
+#             prod = np.dot(matrices[1], matrices[0])
+#             for m in matrices[2:]:
+#                 prod = np.dot(m, prod)
+#             return prod
+#
+#     @staticmethod
+#     def rotation_matrix_from_angle(angle):
+#         """
+#         Clockwise rotation matrix.
+#         """
+#         return np.array([[math.cos(angle), -math.sin(angle)],
+#                          [math.sin(angle), math.cos(angle)]])
+#
+#     def evaluate(self, x, y, z, angles):
+#         """
+#         Apply the rotation to a set of 3D Cartesian coordinates.
+#         """
+#         if x.shape != y.shape != z.shape:
+#             raise ValueError("Expected input arrays to have the same shape")
+#         # Note: If the original shape was () (an array scalar) convert to a
+#         # 1-element 1-D array on output for consistency with most other models
+#         orig_shape = x.shape or (1,)
+#         inarr = np.array([x.flatten(), y.flatten(), z.flatten()])
+#         result = np.dot(self._compute_matrix(angles[0], self.axes_order), inarr)
+#         x, y, z = result[0], result[1], result[2]
+#         x.shape = y.shape = z.shape = orig_shape
+#         return x, y, z
+#
 
 
 class Gwa2Slit(Model):
@@ -862,88 +862,72 @@ class Logical(Model):
             self.compareto, self.value)
 
 
-class V23ToSky(Rotation3D):
-    """
-    Transform from V2V3 to a standard coordinate system (ICRS).
 
-    Parameters
-    ----------
-    angles : list
-        A sequence of angles (in deg).
-        The angles are [-V2_REF, V3_REF, -ROLL_REF, -DEC_REF, RA_REF].
-    axes_order : str
-        A sequence of characters ('x', 'y', or 'z') corresponding to the
-        axis of rotation and matching the order in ``angles``.
-        The axes are "zyxyz".
-    """
-
-    _separable = False
-
-    n_inputs = 2
-    n_outputs = 2
-
-    def __init__(self, angles, axes_order, name=None):
-        super(V23ToSky, self).__init__(angles, axes_order=axes_order, name=name)
-        self._inputs = ("v2", "v3")
-        """ ("v2", "v3"): Coordinates in the (V2, V3) telescope frame."""
-        self._outputs = ("ra", "dec")
-        """ ("ra", "dec"): RA, DEC cooridnates in ICRS."""
-
-    @property
-    def inputs(self):
-        return self._inputs
-
-    @inputs.setter
-    def inputs(self, val):
-        self._inputs = val
-
-    @property
-    def outputs(self):
-        return self._outputs
-
-    @outputs.setter
-    def outputs(self, val):
-        self._outputs = val
-
-    @staticmethod
-    def spherical2cartesian(alpha, delta):
-        """
-        Convert spherical coordinates (in deg) to cartesian.
-        """
-        alpha = np.deg2rad(alpha)
-        delta = np.deg2rad(delta)
-        x = np.cos(alpha) * np.cos(delta)
-        y = np.cos(delta) * np.sin(alpha)
-        z = np.sin(delta)
-        return np.array([x, y, z])
-
-    @staticmethod
-    def cartesian2spherical(x, y, z):
-        """
-        Convert cartesian coordinates to spherical coordinates (in deg).
-        """
-        h = np.hypot(x, y)
-        alpha = np.rad2deg(np.arctan2(y, x))
-        delta = np.rad2deg(np.arctan2(z, h))
-        return alpha, delta
-
-    def evaluate(self, v2, v3, angles):
-        x, y, z = self.spherical2cartesian(v2, v3)
-        x1, y1, z1 = super(V23ToSky, self).evaluate(x, y, z, angles)
-        ra, dec = self.cartesian2spherical(x1, y1, z1)
-
-        return ra, dec
-
-    def __call__(self, v2, v3, **kwargs):
-        from itertools import chain
-        inputs, format_info = self.prepare_inputs(v2, v3)
-        parameters = self._param_sets(raw=True)
-
-        outputs = self.evaluate(*chain(inputs, parameters))
-        if self.n_outputs == 1:
-            outputs = (outputs,)
-
-        return self.prepare_outputs(format_info, *outputs)
+# class V23ToSky(Rotation3D):
+#     """
+#     Transform from V2V3 to a standard coordinate system (ICRS).
+#
+#     Parameters
+#     ----------
+#     angles : list
+#         A sequence of angles (in deg).
+#         The angles are [-V2_REF, V3_REF, -ROLL_REF, -DEC_REF, RA_REF].
+#     axes_order : str
+#         A sequence of characters ('x', 'y', or 'z') corresponding to the
+#         axis of rotation and matching the order in ``angles``.
+#         The axes are "zyxyz".
+#     """
+#
+#     _separable = False
+#
+#     inputs = ("v2", "v3")
+#     """ ("v2", "v3"): Coordinates in the (V2, V3) telescope frame."""
+#     outputs = ("ra", "dec")
+#     """ ("ra", "dec"): RA, DEC cooridnates in ICRS."""
+#
+#     def __init__(self, angles, axes_order, name=None):
+#         super(V23ToSky, self).__init__(angles, axes_order=axes_order, name=name)
+#
+#     @staticmethod
+#     def spherical2cartesian(alpha, delta):
+#         """
+#         Convert spherical coordinates (in deg) to cartesian.
+#         """
+#         alpha = np.deg2rad(alpha)
+#         delta = np.deg2rad(delta)
+#         x = np.cos(alpha) * np.cos(delta)
+#         y = np.cos(delta) * np.sin(alpha)
+#         z = np.sin(delta)
+#         return np.array([x, y, z])
+#
+#     @staticmethod
+#     def cartesian2spherical(x, y, z):
+#         """
+#         Convert cartesian coordinates to spherical coordinates (in deg).
+#         """
+#         h = np.hypot(x, y)
+#         alpha = np.rad2deg(np.arctan2(y, x))
+#         delta = np.rad2deg(np.arctan2(z, h))
+#         return alpha, delta
+#
+#     def evaluate(self, v2, v3, angles):
+#         x, y, z = self.spherical2cartesian(v2, v3)
+#         x1, y1, z1 = super(V23ToSky, self).evaluate(x, y, z, angles)
+#         ra, dec = self.cartesian2spherical(x1, y1, z1)
+#
+#         return ra, dec
+#
+#     def __call__(self, v2, v3, **kwargs):
+#         from itertools import chain
+#         inputs, format_info = self.prepare_inputs(v2, v3)
+#         parameters = self._param_sets(raw=True)
+#
+#         outputs = self.evaluate(*chain(inputs, parameters))
+#         if self.n_outputs == 1:
+#             outputs = (outputs,)
+#
+#         return self.prepare_outputs(format_info, *outputs)
+#
 
 
 class IdealToV2V3(Model):
@@ -954,6 +938,7 @@ class IdealToV2V3(Model):
     Note: This model has no schema implemented - add schema if needed.
     """
     _separable = False
+
     n_inputs = 2
     n_outputs = 2
 
@@ -1419,7 +1404,7 @@ class NIRISSBackwardGrismDispersion(Model):
         dy = self.ymodels[iorder][0](x, y) + t * self.ymodels[iorder][1](x, y)
         # rotate by theta
         if self.theta != 0.0:
-            rotate = Rotation2D(self.theta)
+            rotate = rotations.Rotation2D(self.theta)
             dx, dy = rotate(dx, dy)
 
         return (x+dx, y+dy, x, y, order)
@@ -1520,7 +1505,7 @@ class NIRISSForwardRowGrismDispersion(Model):
         dx = self.xmodels[iorder][0](x0, y0) + t * self.xmodels[iorder][1](x0, y0)
         dy = self.ymodels[iorder][0](x0, y0) + t * self.ymodels[iorder][1](x0, y0)
         if self.theta != 0.0:
-            rotate = Rotation2D(self.theta)
+            rotate = rotations.Rotation2D(self.theta)
             dx, dy = rotate(dx, dy)
         so = np.argsort(dx)
         tr = np.interp(dxr, dx[so], t[so])
@@ -1618,7 +1603,7 @@ class NIRISSForwardColumnGrismDispersion(Model):
         dx = self.xmodels[iorder][0](x0, y0) + t * self.xmodels[iorder][1](x0, y0)
         dy = self.ymodels[iorder][0](x0, y0) + t * self.ymodels[iorder][1](x0, y0)
         if self.theta != 0.0:
-            rotate = Rotation2D(self.theta)
+            rotate = rotations.Rotation2D(self.theta)
             dx, dy = rotate(dx, dy)
         so = np.argsort(dy)
         tr = np.interp(dyr, dy[so], t[so])

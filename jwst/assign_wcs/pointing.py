@@ -7,7 +7,9 @@ from gwcs import utils as gwutils
 from gwcs import coordinate_frames as cf
 from gwcs import wcs
 from ..transforms.models import V23ToSky
-
+from astropy.modeling import rotations
+#
+# V23ToSky = rotations.SphericalRotationSequence
 
 __all__ = ["compute_roll_ref", "frame_from_model", "fitswcs_transform_from_model"]
 
@@ -19,9 +21,10 @@ def v23tosky(input_model):
     ra_ref = input_model.meta.wcsinfo.ra_ref
     dec_ref = input_model.meta.wcsinfo.dec_ref
 
-    angles = [-v2_ref, v3_ref, -roll_ref, -dec_ref, ra_ref]
+    # angles = [-v2_ref, v3_ref, -roll_ref, -dec_ref, ra_ref]
+    angles = [v2_ref, -v3_ref, roll_ref, dec_ref, -ra_ref]
     axes = "zyxyz"
-    sky_rotation = V23ToSky(angles, axes_order=axes, name="v23tosky")
+    sky_rotation = V23ToSky(angles, axes_order=axes, name="v23tosky").inverse
     # The sky rotation expects values in deg.
     # This should be removed when models work with quantities.
     return astmodels.Scale(1/3600) & astmodels.Scale(1/3600) | sky_rotation
@@ -57,12 +60,15 @@ def compute_roll_ref(v2_ref, v3_ref, roll_ref, ra_ref, dec_ref, new_v2_ref, new_
     v3_ref = v3_ref / 3600
 
     if np.isclose(v2_ref, 0, atol=1e-13) and np.isclose(v3_ref, 0, atol=1e-13):
-        angles = [-roll_ref, -dec_ref, - ra_ref]
+        # angles = [-roll_ref, -dec_ref, - ra_ref]
+        angles = [roll_ref, dec_ref, ra_ref]
         axes = "xyz"
     else:
-        angles = [-v2_ref, v3_ref, -roll_ref, -dec_ref, ra_ref]
+        angles = [v2_ref, -v3_ref, roll_ref, dec_ref, -ra_ref]
         axes = "zyxyz"
-    M = V23ToSky._compute_matrix(np.deg2rad(angles), axes)
+    # M = V23ToSky._compute_matrix(np.deg2rad(angles), axes)
+    M = rotations._create_matrix(np.deg2rad(angles), axes)
+    #M = np.linalg.inv(M)
     return _roll_angle_from_matrix(M, v2, v3)
 
 

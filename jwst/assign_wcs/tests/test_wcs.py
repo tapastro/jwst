@@ -9,6 +9,9 @@ from .. import pointing
 from ...transforms import models
 from ...datamodels import ImageModel, fits_support
 
+from astropy.modeling import rotations
+#
+# V23ToSky = rotations.SphericalRotationSequence
 
 
 def _create_model_2d():
@@ -77,7 +80,8 @@ def test_v23_to_sky():
     v2 = 210 # in deg
     v3 = -75 # in deg
     expected_ra_dec = (107.12810484789563, -35.97940247128502) # in deg
-    angles = [-v2_ref, v3_ref, -r0, -dec_ref, ra_ref]
+    #angles = [-v2_ref, v3_ref, -r0, -dec_ref, ra_ref]
+    angles = [v2_ref, -v3_ref, r0, dec_ref, -ra_ref]
     axes = "zyxyz"
     v2s = models.V23ToSky(angles, axes_order=axes)
     radec = v2s(v2, v3)
