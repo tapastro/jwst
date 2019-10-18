@@ -2,3 +2,4 @@ git+https://github.com/astropy/astropy#egg=astropy
 git+https://github.com/spacetelescope/asdf#egg=asdf
 git+https://github.com/spacetelescope/gwcs#egg=gwcs
 git+https://github.com/astropy/photutils#egg=photutils
+crds==7.4.1.1
