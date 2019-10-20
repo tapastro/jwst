@@ -218,6 +218,7 @@ class Snell(Model):
 
     standard_broadcasting = False
     _separable = False
+    fittable = False
 
     n_inputs = 4
     n_outputs = 3
@@ -362,6 +363,7 @@ class AngleFromGratingEquation(Model):
     """
 
     _separable = False
+
     n_inputs = 4
     n_outputs = 3
 
@@ -403,6 +405,7 @@ class WavelengthFromGratingEquation(Model):
     """
 
     _separable = False
+
     n_inputs = 3
     n_outputs = 1
 
@@ -790,7 +793,6 @@ class NirissSOSSModel(Model):
         """ x and y pixel coordinates and spectral order"""
         self.outputs = ('ra', 'dec', 'lam')
         """ RA and DEC coordinates and wavelength"""
-
         self.spectral_orders = spectral_orders
         self.models = dict(zip(spectral_orders, models))
 
@@ -826,9 +828,10 @@ class Logical(Model):
     value : float, ndarray
         Value to substitute where condition is True.
     """
+
+    _separable = False
     n_inputs = 1
     n_outputs = 1
-    _separable = False
 
     conditions = {'GT': np.greater,
                   'LT': np.less,
@@ -1561,7 +1564,7 @@ class NIRISSForwardColumnGrismDispersion(Model):
             name = 'niriss_forward_column_grism_dispersion'
         super(NIRISSForwardColumnGrismDispersion, self).__init__(name=name,
                                                                  meta=meta)
-         # starts with the backwards pixel and calculates the forward pixel
+        # starts with the backwards pixel and calculates the forward pixel
         self.inputs = ("x", "y", "x0", "y0", "order")
         self.outputs = ("x", "y", "wavelength", "order")
 
