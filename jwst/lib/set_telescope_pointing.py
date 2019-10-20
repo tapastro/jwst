@@ -495,7 +495,8 @@ def update_s_region(model, siaf):
     # Convert to deg
     v2 = v2 / 3600  # in deg
     v3 = v3 / 3600  # in deg
-    angles = [-v2_ref_deg, v3_ref_deg, -roll_ref, -dec_ref, ra_ref]
+    #angles = [-v2_ref_deg, v3_ref_deg, -roll_ref, -dec_ref, ra_ref]
+    angles = [v2_ref_deg, -v3_ref_deg, roll_ref, dec_ref, -ra_ref]
     axes = "zyxyz"
     v23tosky = V23ToSky(angles, axes_order=axes)
     ra_vert, dec_vert = v23tosky(v2, v3)
