@@ -64,6 +64,7 @@ def compute_roll_ref(v2_ref, v3_ref, roll_ref, ra_ref, dec_ref, new_v2_ref, new_
         angles = [roll_ref, dec_ref, ra_ref]
         axes = "xyz"
     else:
+        #angles = [-v2_ref, v3_ref, -roll_ref, -dec_ref, ra_ref]
         angles = [v2_ref, -v3_ref, roll_ref, dec_ref, -ra_ref]
         axes = "zyxyz"
     # M = V23ToSky._compute_matrix(np.deg2rad(angles), axes)
