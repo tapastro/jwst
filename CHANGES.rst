@@ -100,23 +100,6 @@ white_light
 
 0.14.1 (2019-11-11)
 ===================
-
-associations
-------------
-
-- Updated level 3 rules so that target acquisitions in the pool files are listed as
-  exp_type = 'target_acquisition', not as science exposures. [#4223]
-
-datamodels
-----------
-
-- Updated the list of allowed NIRCam CORONMSK values in model schemas. [#4234]
-
-flat_field
-----------
- - Updated handling of error arrays for FGS Guider data, which has not been run
-   through ramp fitting [#4309]
-
 lib
 ---
 
