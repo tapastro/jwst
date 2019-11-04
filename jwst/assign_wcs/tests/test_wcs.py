@@ -83,7 +83,7 @@ def test_v23_to_sky():
     #angles = [-v2_ref, v3_ref, -r0, -dec_ref, ra_ref]
     angles = [v2_ref, -v3_ref, r0, dec_ref, -ra_ref]
     axes = "zyxyz"
-    v2s = models.V23ToSky(angles, axes_order=axes)
+    v2s = rotations.SphericalRotationSequence(angles, axes_order=axes)
     radec = v2s(v2, v3)
     utils.assert_allclose(radec, expected_ra_dec, atol=1e-10)
 
