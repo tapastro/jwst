@@ -6,6 +6,7 @@ import sqlite3
 from collections import namedtuple
 
 from astropy.time import Time
+from astropy.modeling import rotations
 import numpy as np
 
 from ..assign_wcs.util import update_s_region_keyword
