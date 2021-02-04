@@ -29,6 +29,7 @@ __all__ = [
     'Asn_Lv2MIRLRSFixedSlitNod',
     'Asn_Lv2NRSFSS',
     'Asn_Lv2NRSIFUNod',
+    'Asn_Lv2NRSLAMPImage',
     'Asn_Lv2NRSLAMPSpectral',
     'Asn_Lv2NRSMSA',
     'Asn_Lv2Spec',
@@ -445,7 +446,7 @@ class Asn_Lv2NRSLAMPImage(
             DMSAttrConstraint(
                 name='exp_type',
                 sources=['exp_type'],
-                value='nrs_lamp',
+                value='nrs_lamp'
             ),
             DMSAttrConstraint(
                 name='grating',
@@ -456,7 +457,7 @@ class Asn_Lv2NRSLAMPImage(
                 name='opmode',
                 sources=['opmode'],
                 value='image'
-            )
+            ),
         ])
 
         super(Asn_Lv2NRSLAMPImage, self).__init__(*args, **kwargs)
