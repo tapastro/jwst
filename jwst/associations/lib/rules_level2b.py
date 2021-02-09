@@ -49,8 +49,8 @@ logger.addHandler(logging.NullHandler())
 # --------------------------------
 @RegistryMarker.rule
 class Asn_Lv2Image(
-        AsnMixin_Lv2Image,
-        DMSLevel2bBase
+    AsnMixin_Lv2Image,
+    DMSLevel2bBase
 ):
     """Level2b Non-TSO Science Image Association
 
@@ -63,7 +63,6 @@ class Asn_Lv2Image(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -82,9 +81,9 @@ class Asn_Lv2Image(
 
 @RegistryMarker.rule
 class Asn_Lv2ImageNonScience(
-        AsnMixin_Lv2Special,
-        AsnMixin_Lv2Image,
-        DMSLevel2bBase
+    AsnMixin_Lv2Special,
+    AsnMixin_Lv2Image,
+    DMSLevel2bBase
 ):
     """Level2b Non-science Image Association
 
@@ -96,7 +95,6 @@ class Asn_Lv2ImageNonScience(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -110,9 +108,9 @@ class Asn_Lv2ImageNonScience(
 
 @RegistryMarker.rule
 class Asn_Lv2ImageSpecial(
-        AsnMixin_Lv2Special,
-        AsnMixin_Lv2Image,
-        DMSLevel2bBase
+    AsnMixin_Lv2Special,
+    AsnMixin_Lv2Image,
+    DMSLevel2bBase
 ):
     """Level2b Auxiliary Science Image Association
 
@@ -125,7 +123,6 @@ class Asn_Lv2ImageSpecial(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -141,8 +138,8 @@ class Asn_Lv2ImageSpecial(
 
 @RegistryMarker.rule
 class Asn_Lv2ImageTSO(
-        AsnMixin_Lv2Image,
-        DMSLevel2bBase
+    AsnMixin_Lv2Image,
+    DMSLevel2bBase
 ):
     """Level2b Time Series Science Image Association
 
@@ -154,7 +151,6 @@ class Asn_Lv2ImageTSO(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -176,8 +172,8 @@ class Asn_Lv2ImageTSO(
 
 @RegistryMarker.rule
 class Asn_Lv2FGS(
-        AsnMixin_Lv2Image,
-        DMSLevel2bBase
+    AsnMixin_Lv2Image,
+    DMSLevel2bBase
 ):
     """Level2b FGS Association
 
@@ -189,7 +185,6 @@ class Asn_Lv2FGS(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -213,8 +208,8 @@ class Asn_Lv2FGS(
 
 @RegistryMarker.rule
 class Asn_Lv2Spec(
-        AsnMixin_Lv2Spectral,
-        DMSLevel2bBase
+    AsnMixin_Lv2Spectral,
+    DMSLevel2bBase
 ):
     """Level2b Science Spectral Association
 
@@ -228,7 +223,6 @@ class Asn_Lv2Spec(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -266,9 +260,9 @@ class Asn_Lv2Spec(
 
 @RegistryMarker.rule
 class Asn_Lv2SpecSpecial(
-        AsnMixin_Lv2Special,
-        AsnMixin_Lv2Spectral,
-        DMSLevel2bBase
+    AsnMixin_Lv2Special,
+    AsnMixin_Lv2Spectral,
+    DMSLevel2bBase
 ):
     """Level2b Auxiliary Science Spectral Association
 
@@ -280,7 +274,6 @@ class Asn_Lv2SpecSpecial(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -296,8 +289,8 @@ class Asn_Lv2SpecSpecial(
 
 @RegistryMarker.rule
 class Asn_Lv2SpecTSO(
-        AsnMixin_Lv2Spectral,
-        DMSLevel2bBase
+    AsnMixin_Lv2Spectral,
+    DMSLevel2bBase
 ):
     """Level2b Time Series Science Spectral Association
 
@@ -310,7 +303,6 @@ class Asn_Lv2SpecTSO(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -334,8 +326,8 @@ class Asn_Lv2SpecTSO(
 
 @RegistryMarker.rule
 class Asn_Lv2MIRLRSFixedSlitNod(
-        AsnMixin_Lv2Spectral,
-        DMSLevel2bBase
+    AsnMixin_Lv2Spectral,
+    DMSLevel2bBase
 ):
     """Level2b MIRI LRS Fixed Slit background nods Association
 
@@ -348,7 +340,6 @@ class Asn_Lv2MIRLRSFixedSlitNod(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -425,8 +416,9 @@ class Asn_Lv2MIRLRSFixedSlitNod(
 
 @RegistryMarker.rule
 class Asn_Lv2NRSLAMPImage(
-        AsnMixin_Lv2Image,
-        DMSLevel2bBase
+    AsnMixin_Lv2Image,
+    AsnMixin_Lv2Special,
+    DMSLevel2bBase
 ):
     """Level2b NIRSpec image Lamp Calibrations Association
 
@@ -438,7 +430,6 @@ class Asn_Lv2NRSLAMPImage(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -449,12 +440,10 @@ class Asn_Lv2NRSLAMPImage(
                 value='nrs_lamp'
             ),
             DMSAttrConstraint(
-                name='grating',
                 sources=['grating'],
                 value='mirror'
             ),
             DMSAttrConstraint(
-                name='opmode',
                 sources=['opmode'],
                 value='image'
             ),
@@ -465,8 +454,8 @@ class Asn_Lv2NRSLAMPImage(
 
 @RegistryMarker.rule
 class Asn_Lv2NRSLAMPSpectral(
-        AsnMixin_Lv2Special,
-        DMSLevel2bBase
+    AsnMixin_Lv2Special,
+    DMSLevel2bBase
 ):
     """Level2b NIRSpec spectral Lamp Calibrations Association
 
@@ -478,7 +467,6 @@ class Asn_Lv2NRSLAMPSpectral(
     """
 
     def __init__(self, *args, **kwargs):
-
         self.constraints = Constraint([
             Constraint_Base(),
             Constraint_Single_Science(self.has_science),
@@ -533,8 +521,8 @@ class Asn_Lv2NRSLAMPSpectral(
 
 @RegistryMarker.rule
 class Asn_Lv2WFSS(
-        AsnMixin_Lv2Spectral,
-        DMSLevel2bBase
+    AsnMixin_Lv2Spectral,
+    DMSLevel2bBase
 ):
     """Level2b WFSS/GRISM Association
 
@@ -609,7 +597,7 @@ class Asn_Lv2WFSS(
             # If exposure sequence cannot be determined, just fall through.
             logger.debug('Science exposure %s has no EXPSPCIN defined.', science)
         else:
-            min_diff = -1         # Initialize to an invalid value.
+            min_diff = -1  # Initialize to an invalid value.
             for direct in directs:
                 try:
                     direct_expspcin = int(getattr_from_list(
@@ -718,9 +706,9 @@ class Asn_Lv2WFSS(
 
 @RegistryMarker.rule
 class Asn_Lv2NRSMSA(
-        AsnMixin_Lv2Nod,
-        AsnMixin_Lv2Spectral,
-        DMSLevel2bBase
+    AsnMixin_Lv2Nod,
+    AsnMixin_Lv2Spectral,
+    DMSLevel2bBase
 ):
     """Level2b NIRSpec MSA Association
 
@@ -733,7 +721,6 @@ class Asn_Lv2NRSMSA(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -762,9 +749,9 @@ class Asn_Lv2NRSMSA(
 
 @RegistryMarker.rule
 class Asn_Lv2NRSFSS(
-        AsnMixin_Lv2Nod,
-        AsnMixin_Lv2Spectral,
-        DMSLevel2bBase
+    AsnMixin_Lv2Nod,
+    AsnMixin_Lv2Spectral,
+    DMSLevel2bBase
 ):
     """Level2b NIRSpec Fixed-slit Association
 
@@ -783,7 +770,6 @@ class Asn_Lv2NRSFSS(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -837,9 +823,9 @@ class Asn_Lv2NRSFSS(
 
 @RegistryMarker.rule
 class Asn_Lv2NRSIFUNod(
-        AsnMixin_Lv2Nod,
-        AsnMixin_Lv2Spectral,
-        DMSLevel2bBase
+    AsnMixin_Lv2Nod,
+    AsnMixin_Lv2Spectral,
+    DMSLevel2bBase
 ):
     """Level2b NIRSpec IFU Association
 
@@ -852,7 +838,6 @@ class Asn_Lv2NRSIFUNod(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -885,7 +870,7 @@ class Asn_Lv2NRSIFUNod(
 
 @RegistryMarker.rule
 class Asn_Lv2WFSC(
-        DMSLevel2bBase
+    DMSLevel2bBase
 ):
     """Level2b Wavefront Sensing & Control Association
 
@@ -897,7 +882,6 @@ class Asn_Lv2WFSC(
     """
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             Constraint_Base(),
@@ -922,7 +906,6 @@ class Asn_Force_Reprocess(DMSLevel2bBase):
     """Force all backgrounds to reprocess"""
 
     def __init__(self, *args, **kwargs):
-
         # Setup constraints
         self.constraints = Constraint([
             SimpleConstraint(
