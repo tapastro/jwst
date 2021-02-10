@@ -445,7 +445,8 @@ class Asn_Lv2NRSLAMPImage(
             ),
             DMSAttrConstraint(
                 sources=['opmode'],
-                value='image'
+                value='image',
+                required=False
             ),
         ])
 
