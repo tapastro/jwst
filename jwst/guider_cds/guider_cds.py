@@ -136,11 +136,11 @@ def get_dataset_info(model):
 
     imshape = (asize2, asize1)
 
-    log.info('Instrument: %s' % (instrume))
-    log.info('Exposure type: %s' % (exp_type))
-    log.info('Number of integrations: %d' % (n_int))
-    log.info('Number of groups per integration: %d' % (ngroups))
-    log.info('Group time: %s' % (grp_time))
-    log.info('Frame time: %10.5f' % (frame_time))
+    log.info(f"Instrument: {instrume}")
+    log.info(f"Exposure type: {exp_type}")
+    log.info(f"Number of integrations: {n_int}")
+    log.info(f"Number of groups per integration: {ngroups}")
+    log.info(f"Group time: {grp_time}")
+    log.info(f"Frame time: {frame_time}")
 
     return imshape, n_int, grp_time, exp_type
