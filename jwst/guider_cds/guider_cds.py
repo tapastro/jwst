@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 
-def guider_cds(model):
+def guider_cds(model, rnoise_ref):
     """
     Extended Summary
     ----------------

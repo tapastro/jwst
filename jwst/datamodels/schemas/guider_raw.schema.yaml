@@ -32,8 +32,6 @@ allOf:
       datatype:
       - name: guide_star_order
         datatype: int32
-      - name: reference_order
-        datatype: int32
       - name: reference_star_id
         datatype: [ascii, 12]
       - name: ra

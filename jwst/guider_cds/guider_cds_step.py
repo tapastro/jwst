@@ -3,6 +3,7 @@
 from ..stpipe import Step
 from .. import datamodels
 from . import guider_cds
+from crds import CrdsLookupError
 
 import logging
 log = logging.getLogger(__name__)
@@ -21,7 +22,21 @@ class GuiderCdsStep (Step):
 
     def process(self, input):
         with datamodels.GuiderRawModel(input) as input_model:
-            out_model = guider_cds.guider_cds(input_model)
+
+            # Retrieve readnoise reference file
+            try:
+                rnoise_ref = self.get_reference_file(input_model, 'readnoise')
+            except CrdsLookupError:
+                # Create mock DataModel to retrieve basic readnoise reference file
+                # Note that this is an approximation, as the rmap is not complete for all read patterns
+                self.log.warning("Readnoise reference file does not exist for this read pattern - "
+                                 "Calculating approximate error array using readnoise reference for "
+                                 "FGS60 read pattern.")
+                mockmodel = input_model.copy()
+                mockmodel.meta.exposure.readpatt = "FGS60"
+                rnoise_ref = self.get_reference_file(mockmodel, 'readnoise')
+
+            out_model = guider_cds.guider_cds(input_model, rnoise_ref)
 
         out_model.meta.cal_step.guider_cds = 'COMPLETE'
 
