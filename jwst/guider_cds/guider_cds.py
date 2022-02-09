@@ -32,6 +32,9 @@ def guider_cds(model, rnoise_ref):
         input data model, assumed to be of type GuiderRawModel
     """
 
+    # Load readnoise reference file as DataModel
+    rnoise_model = datamodels.ReadnoiseModel(rnoise_ref)
+
     # get needed sizes and shapes
     imshape, n_int, grp_time, exp_type = get_dataset_info(model)
 

@@ -20,6 +20,8 @@ class GuiderCdsStep (Step):
 
     class_alias = "guider_cds"
 
+    reference_file_types = ["readnoise"]
+
     def process(self, input):
         with datamodels.GuiderRawModel(input) as input_model:
 
