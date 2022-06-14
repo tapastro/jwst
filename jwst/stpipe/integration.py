@@ -30,6 +30,8 @@ def get_steps():
         ("jwst.pipeline.Image3Pipeline", 'calwebb_image3', True),
         ("jwst.pipeline.Spec2Pipeline", 'calwebb_spec2', True),
         ("jwst.pipeline.Spec3Pipeline", 'calwebb_spec3', True),
+        ("jwst.pipeline.Spec3SinglePipeline", 'calwebb_spec3_singlesource', True),
+        ("jwst.pipeline.Spec3MultiPipeline", 'calwebb_spec3_multi', True),
         ("jwst.pipeline.Tso3Pipeline", 'calwebb_tso3', True),
         ("jwst.step.AmiAnalyzeStep", 'ami_analyze', False),
         ("jwst.step.AmiAverageStep", 'ami_average', False),
