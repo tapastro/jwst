@@ -5,6 +5,7 @@ import numpy as np
 import logging
 
 from stdatamodels.jwst.datamodels import dqflags
+from copy import deepcopy
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -30,6 +31,9 @@ def do_correction(output):
     """
     # Save some data params for easy use later
     sci_ngroups = output.data.shape[1]
+    output2 = deepcopy(output)
+
+    log.info(f"Made an extra copy for fun! New data shape: {output2.data.shape}")
 
     # Update the step status, and if ngroups > 2, set all of the GROUPDQ in
     # the final group to 'DO_NOT_USE'
