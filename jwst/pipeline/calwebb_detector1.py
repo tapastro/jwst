@@ -4,6 +4,7 @@ import logging
 from stdatamodels.jwst import datamodels
 
 from ..stpipe import Pipeline
+import numpy as np
 
 # step imports
 from ..group_scale import group_scale_step
@@ -109,10 +110,7 @@ class Detector1Pipeline(Pipeline):
             input_data = self.ipc.run(input_data)
             input_data = self.firstframe.run(input_data)
             input_data = self.lastframe.run(input_data)
-            import copy
-            test_data = copy.deepcopy(input_data)
-            test_data.meta.calibration_software_version = '1.1.1'
-            input_data = test_data
+            new_array = np.ones((1000, 1000, 1000), dtype=float)
             input_data = self.reset.run(input_data)
             input_data = self.linearity.run(input_data)
             input_data = self.rscd.run(input_data)
