@@ -73,7 +73,7 @@ SPECIAL_POOLS = {
         'slow': True,
     },
     'jw00676_20210403t114320_c1007_pool': {
-        'args': ["--DMS"],
+        'args': [],
         'xfail': None,
         'slow': True,
     },
@@ -98,7 +98,7 @@ SPECIAL_POOLS = {
         'slow': False,
     },
     'jw01194_20230115t113819_pool': {
-        'args': ["--DMS"],
+        'args': [],
         'xfail': None,
         'slow': True,
     },
@@ -162,11 +162,6 @@ SPECIAL_POOLS = {
     },
     'jw04225_20241213t150701DMS_pool': {
         'args': ['-i', 'o001', 'o002', '--DMS'],
-        'xfail': None,
-        'slow': False,
-    },
-    'jw05554_20250528t204800_c1012_pool': {
-        'args': ["--DMS", "-i", "o009", "o010", "c1012"],
         'xfail': None,
         'slow': False,
     },
