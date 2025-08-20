@@ -1368,6 +1368,7 @@ class NIRDataset(Dataset):
         dnudq = dqflags.pixel["DO_NOT_USE"]
 
         for amplifier in self.amplifiers:
+            # TODO: breakpoint()
             amp_xi, amp_xf = MULTISTRIPE_AMPLIFIER_REGIONS[amplifier]
             refpix[amplifier] = {}
             mask = np.where(
