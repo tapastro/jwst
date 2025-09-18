@@ -994,6 +994,12 @@ class AsnMixin_Science(DMS_Level3_Base):
                     name="acq_check",
                     reduce=Constraint.any,
                 ),
+                DMSAttrConstraint(
+                    name="mt_shadow",
+                    sources=["mtshadow"],
+                    force_unique=True,
+                    required=False,
+                ),
             ],
             name="dmsbase_top",
         )
