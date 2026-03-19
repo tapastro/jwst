@@ -89,8 +89,8 @@ def test_generate_stripe_repeat_stripe_zero():
     """
     Test generate_stripe_array in DHS mode when repeat_stripe=0.
 
-    When repeat_stripe=0 the read head does not reset between stripes;
-    successive nreads2 blocks are separated by nskips2 rows advancing
+    When repeat_stripe=0 the read head does not reset between stripes.
+    Successive nreads2 blocks are separated by nskips2 rows advancing
     monotonically through the detector.
     """
     # Array where every pixel value equals its row index.
@@ -105,8 +105,9 @@ def test_generate_stripe_repeat_stripe_zero():
     fastaxis, slowaxis, ngroups = -1, 2, 1
     # Detector read sequence: row 0 (nreads1), skip 10 (nskips1),
     # rows 11-30 (nreads2), skip 5 (nskips2), rows 36-55 (nreads2),
-    # skip 5 (nskips2), rows 61-80 (nreads2) → 61 output rows total.
-    ysize_sci = nreads1 + nreads2 * 3  # 1 + 20*3 = 61
+    # skip 5 (nskips2), rows 61-80 (nreads2)
+    # yielding 61 non-skip output rows total.
+    ysize_sci = nreads1 + nreads2 * 3
 
     stripe_params = (
         xsize_sci,
@@ -132,10 +133,10 @@ def test_generate_stripe_repeat_stripe_zero():
     # Output row 1: start of first nreads2 block; head advanced by nreads1 + nskips1.
     assert stripe_array[1, 1024] == nreads1 + nskips1
     # Output row nreads1 + nreads2: start of second nreads2 block;
-    # head advanced by an additional nreads2 + nskips2 (no reset).
+    # head advanced by an additional nreads2 + nskips2.
     assert stripe_array[nreads1 + nreads2, 1024] == nreads1 + nskips1 + nreads2 + nskips2
     # Output row nreads1 + 2*nreads2: start of third nreads2 block;
-    # head advanced by yet another nreads2 + nskips2
+    # head advanced by yet another nreads2 + nskips2.
     assert stripe_array[nreads1 + 2 * nreads2, 1024] == nreads1 + nskips1 + 2 * (nreads2 + nskips2)
 
 
