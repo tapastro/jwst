@@ -9,7 +9,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_wfss_contam(rtdata_module, resource_tracker):
+def run_wfss_contam(rtdata_module):
     """Run the wfss_contam step"""
     rtdata = rtdata_module
 
@@ -28,13 +28,8 @@ def run_wfss_contam(rtdata_module, resource_tracker):
             "--skip=False",
         ],
     }
-    with resource_tracker.track():
-        rtdata = rt.run_step_from_dict(rtdata, **step_params)
+    rtdata = rt.run_step_from_dict(rtdata, **step_params)
     return rtdata
-
-
-def test_log_tracked_resources_nircam_wfss_contam(log_tracked_resources, run_wfss_contam):
-    log_tracked_resources()
 
 
 @pytest.mark.parametrize("suffix", ["simul", "contam", "wfsscontamstep"])

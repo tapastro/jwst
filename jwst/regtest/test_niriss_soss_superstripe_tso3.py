@@ -8,7 +8,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_tso3(rtdata_module, resource_tracker):
+def run_tso3(rtdata_module):
     """Run stage 3 pipeline on NIRISS SOSS superstripe data."""
     rtdata = rtdata_module
     rtdata.get_data("niriss/soss/jwst_niriss_specprofile_0022.fits")
@@ -18,12 +18,7 @@ def run_tso3(rtdata_module, resource_tracker):
         rtdata.input,
         "--steps.extract_1d.override_specprofile=jwst_niriss_specprofile_0022.fits",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
-
-
-def test_log_tracked_resources_tso3(log_tracked_resources, run_tso3):
-    log_tracked_resources()
+    Step.from_cmdline(args)
 
 
 def test_niriss_soss_superstripe_tso3_crfints(rtdata_module, run_tso3, fitsdiff_default_kwargs):

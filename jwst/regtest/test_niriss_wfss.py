@@ -10,7 +10,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_nis_wfss_spec2(rtdata_module, resource_tracker):
+def run_nis_wfss_spec2(rtdata_module):
     """Run the calwebb_spec2 pipeline on NIRISS WFSS exposures"""
     rtdata = rtdata_module
 
@@ -37,8 +37,7 @@ def run_nis_wfss_spec2(rtdata_module, resource_tracker):
         "--save_wfss_esec=true",
         "--steps.extract_2d.wfss_nbright=10",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
     # Run the remaining exposures without doing comparisons, just so that
     # fresh results are available for level-3 processing
@@ -49,7 +48,7 @@ def run_nis_wfss_spec2(rtdata_module, resource_tracker):
 
 
 @pytest.fixture(scope="module")
-def run_nis_wfss_spec3(run_nis_wfss_spec2, rtdata_module, resource_tracker):
+def run_nis_wfss_spec3(run_nis_wfss_spec2, rtdata_module):
     """Run the calwebb_spec3 pipeline"""
     rtdata = rtdata_module
 
@@ -58,16 +57,7 @@ def run_nis_wfss_spec3(run_nis_wfss_spec2, rtdata_module, resource_tracker):
     # because they were all just created by the preceding spec2 test.
     rtdata.get_data("niriss/wfss/jw01324-o001_spec3_00005_asn.json")
     args = ["calwebb_spec3", rtdata.input]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
-
-
-def test_log_tracked_resources_spec2(log_tracked_resources, run_nis_wfss_spec2):
-    log_tracked_resources()
-
-
-def test_log_tracked_resources_spec3(log_tracked_resources, run_nis_wfss_spec3):
-    log_tracked_resources()
+    Step.from_cmdline(args)
 
 
 @pytest.mark.parametrize(

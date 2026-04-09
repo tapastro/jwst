@@ -11,7 +11,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_image2(rtdata_module, resource_tracker):
+def run_image2(rtdata_module):
     """Run the calwebb_image2 pipeline"""
 
     rtdata = rtdata_module
@@ -25,14 +25,9 @@ def run_image2(rtdata_module, resource_tracker):
         "--steps.assign_wcs.save_results=true",
         "--steps.flat_field.save_results=true",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
     return rtdata
-
-
-def test_log_tracked_resources_image2(log_tracked_resources, run_image2):
-    log_tracked_resources()
 
 
 @pytest.mark.parametrize(

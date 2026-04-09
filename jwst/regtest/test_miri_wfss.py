@@ -10,7 +10,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_miri_wfss_spec2(rtdata_module, resource_tracker):
+def run_miri_wfss_spec2(rtdata_module):
     """Run the calwebb_spec2 pipeline on MIRI WFSS exposures"""
     rtdata = rtdata_module
     # These are the WFSS exposures we'll be processing

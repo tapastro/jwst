@@ -8,7 +8,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_spec2(rtdata_module, resource_tracker):
+def run_spec2(rtdata_module):
     """Run stage 2 pipeline on NIRISS SOSS superstripe data."""
     rtdata = rtdata_module
     rtdata.get_data("niriss/soss/jwst_niriss_specprofile_0022.fits")
@@ -24,12 +24,7 @@ def run_spec2(rtdata_module, resource_tracker):
         "--steps.flat_field.save_results=True",
         "--steps.extract_1d.override_specprofile=jwst_niriss_specprofile_0022.fits",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
-
-
-def test_log_tracked_resources_spec2(log_tracked_resources, run_spec2):
-    log_tracked_resources()
+    Step.from_cmdline(args)
 
 
 @pytest.mark.parametrize("suffix", ["assign_wcs", "bsubints", "flat_field", "calints", "x1dints"])

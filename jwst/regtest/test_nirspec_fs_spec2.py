@@ -38,7 +38,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module", params=file_roots)  # ids=ids)
-def run_pipeline(rtdata_module, request, resource_tracker):
+def run_pipeline(rtdata_module, request):
     """Run the calwebb_spec2 pipeline on NIRSpec Fixed-Slit exposures.
     We currently test the following types of inputs:
       1) Full-frame exposure (all slits will be extracted)
@@ -62,8 +62,7 @@ def run_pipeline(rtdata_module, request, resource_tracker):
         "--steps.flat_field.save_results=true",
         "--steps.pathloss.save_results=true",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
     return rtdata
 
@@ -114,10 +113,6 @@ def run_pipeline_pixel_replace(rtdata_module):
     Step.from_cmdline(args)
 
     return rtdata
-
-
-def test_log_tracked_resources_spec2(log_tracked_resources, run_pipeline):
-    log_tracked_resources()
 
 
 @pytest.mark.parametrize(

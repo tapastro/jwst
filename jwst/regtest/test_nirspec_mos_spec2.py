@@ -8,7 +8,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_pipeline(rtdata_module, resource_tracker):
+def run_pipeline(rtdata_module):
     """Run the calwebb_spec2 pipeline on a single NIRSpec MOS exposure."""
 
     rtdata = rtdata_module
@@ -34,14 +34,13 @@ def run_pipeline(rtdata_module, resource_tracker):
         "--steps.barshadow.save_results=true",
     ]
 
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
     return rtdata
 
 
 @pytest.fixture(scope="module")
-def run_pipeline_nsclean(rtdata_module, resource_tracker):
+def run_pipeline_nsclean(rtdata_module):
     """Run the calwebb_spec2 pipeline on NIRSpec MOS with nsclean (via clean_flicker_noise)."""
 
     rtdata = rtdata_module
@@ -65,14 +64,9 @@ def run_pipeline_nsclean(rtdata_module, resource_tracker):
         "--steps.clean_flicker_noise.n_sigma=5.0",
     ]
 
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
     return rtdata
-
-
-def test_log_tracked_resources(log_tracked_resources, run_pipeline):
-    log_tracked_resources()
 
 
 @pytest.mark.parametrize(

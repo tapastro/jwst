@@ -75,7 +75,7 @@ def run_detector1_pipeline_emicorr_joint(rtdata_module):
 
 
 @pytest.fixture(scope="module")
-def run_tso_spec2_pipeline(run_tso1_pipeline, rtdata_module, resource_tracker):
+def run_tso_spec2_pipeline(run_tso1_pipeline, rtdata_module):
     """Run the calwebb_tso-spec2 pipeline on a MIRI LRS slitless exposure."""
     rtdata = rtdata_module
 
@@ -90,12 +90,11 @@ def run_tso_spec2_pipeline(run_tso1_pipeline, rtdata_module, resource_tracker):
         "--steps.pixel_replace.save_results=true",
         "--steps.pixel_replace.skip=false",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
 
 @pytest.fixture(scope="module")
-def run_tso3_pipeline(run_tso_spec2_pipeline, rtdata_module, resource_tracker):
+def run_tso3_pipeline(run_tso_spec2_pipeline, rtdata_module):
     """Run the calwebb_tso3 pipeline on the output of run_spec2_pipeline."""
     rtdata = rtdata_module
     rtdata.get_data(f"miri/lrs/{DATASET2_ID}_calints.fits")
@@ -107,16 +106,7 @@ def run_tso3_pipeline(run_tso_spec2_pipeline, rtdata_module, resource_tracker):
         "--steps.outlier_detection.save_results=true",
         "--steps.outlier_detection.save_intermediate_results=true",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
-
-
-def test_log_tracked_resources_spec2(log_tracked_resources, run_tso_spec2_pipeline):
-    log_tracked_resources()
-
-
-def test_log_tracked_resources_spec3(log_tracked_resources, run_tso3_pipeline):
-    log_tracked_resources()
+    Step.from_cmdline(args)
 
 
 @pytest.mark.parametrize(

@@ -8,7 +8,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_pipeline(rtdata_module, resource_tracker):
+def run_pipeline(rtdata_module):
     """Run the calwebb_spec2 pipeline on a single NIRSpec MOS/FS exposure."""
 
     rtdata = rtdata_module
@@ -34,14 +34,9 @@ def run_pipeline(rtdata_module, resource_tracker):
         "--steps.pathloss.save_results=true",
         "--steps.barshadow.save_results=true",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
     return rtdata
-
-
-def test_log_tracked_resources_spec2(log_tracked_resources, run_pipeline):
-    log_tracked_resources()
 
 
 @pytest.mark.parametrize(

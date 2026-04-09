@@ -14,7 +14,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_spec2(rtdata_module, resource_tracker):
+def run_spec2(rtdata_module):
     """Run the Spec2Pipeline on a single exposure"""
     rtdata = rtdata_module
 
@@ -33,12 +33,7 @@ def run_spec2(rtdata_module, resource_tracker):
         "--steps.photom.save_results=true",
         "--steps.photom.apply_time_correction=true",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
-
-
-def test_log_tracked_resources_spec2(log_tracked_resources, run_spec2):
-    log_tracked_resources()
+    Step.from_cmdline(args)
 
 
 @pytest.mark.parametrize(

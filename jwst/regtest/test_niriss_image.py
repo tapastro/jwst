@@ -72,7 +72,7 @@ def run_detector1_multiprocess_rate(rtdata_module):
 
 
 @pytest.fixture(scope="module")
-def run_detector1_multiprocess_rate_save_opt(rtdata_module, resource_tracker):
+def run_detector1_multiprocess_rate_save_opt(rtdata_module):
     """Run calwebb_detector1 pipeline on NIRISS imaging data."""
     rtdata = rtdata_module
 
@@ -98,8 +98,7 @@ def run_detector1_multiprocess_rate_save_opt(rtdata_module, resource_tracker):
         "--steps.ramp_fit.save_opt=True",
         "--steps.ramp_fit.opt_name=jw01094001002_02107_00001_nis.fits",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
 
 @pytest.fixture(scope="module")
@@ -132,7 +131,7 @@ def run_detector1_multiprocess_jump(rtdata_module):
 
 
 @pytest.fixture(scope="module")
-def run_detector1_with_clean_flicker_noise(rtdata_module, resource_tracker):
+def run_detector1_with_clean_flicker_noise(rtdata_module):
     """Run detector1 pipeline on NIRISS imaging data with noise cleaning."""
     rtdata_module.get_data("niriss/imaging/jw01094001002_02107_00001_nis_uncal.fits")
 
@@ -150,12 +149,11 @@ def run_detector1_with_clean_flicker_noise(rtdata_module, resource_tracker):
         "--steps.clean_flicker_noise.save_background=True",
         "--steps.clean_flicker_noise.save_noise=True",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
 
 @pytest.fixture(scope="module")
-def run_detector1_with_likelihood_fitting(rtdata_module, resource_tracker):
+def run_detector1_with_likelihood_fitting(rtdata_module):
     """Run detector1 pipeline on NIRISS imaging data with noise cleaning."""
     rtdata_module.get_data("niriss/imaging/jw01094001002_02107_00001_nis_uncal.fits")
 
@@ -168,26 +166,7 @@ def run_detector1_with_likelihood_fitting(rtdata_module, resource_tracker):
         "--steps.ramp_fit.algorithm=LIKELY",
         "--steps.clean_flicker_noise.skip=True",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
-
-
-def test_log_tracked_resources_det1_mp(
-    log_tracked_resources, run_detector1_multiprocess_rate_save_opt
-):
-    log_tracked_resources()
-
-
-def test_log_tracked_resources_det1_cfn(
-    log_tracked_resources, run_detector1_with_clean_flicker_noise
-):
-    log_tracked_resources()
-
-
-def test_log_tracked_resources_det1_likely(
-    log_tracked_resources, run_detector1_with_likelihood_fitting
-):
-    log_tracked_resources()
+    Step.from_cmdline(args)
 
 
 @pytest.mark.parametrize(

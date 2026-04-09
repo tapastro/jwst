@@ -13,7 +13,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_tso_spec2_pipeline(rtdata_module, resource_tracker):
+def run_tso_spec2_pipeline(rtdata_module):
     """Run the calwebb_spec2 pipeline performed on NIRSpec
     fixed-slit data that uses the NRS_BRIGHTOBJ mode (S1600A1 slit)
     """
@@ -37,14 +37,13 @@ def run_tso_spec2_pipeline(rtdata_module, resource_tracker):
         "--steps.flat_field.save_interpolated_flat=True",
         "--steps.photom.save_results=True",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
     return rtdata
 
 
 @pytest.fixture(scope="module")
-def run_tso_spec2_pixrep(rtdata_module, resource_tracker):
+def run_tso_spec2_pixrep(rtdata_module):
     """
     Run the calwebb_spec2 pipeline on NRS_BRIGHTOBJ data.
 
@@ -71,14 +70,13 @@ def run_tso_spec2_pixrep(rtdata_module, resource_tracker):
         "--steps.pixel_replace.save_results=True",
         "--output_file=jw02420001001_04101_00001_pixrep",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
     return rtdata
 
 
 @pytest.fixture(scope="module")
-def run_tso3_pipeline(rtdata_module, resource_tracker):
+def run_tso3_pipeline(rtdata_module):
     """Run the calwebb_tso3 pipeline on NRS_BRIGHTOBJ (S1600A1 slit) data."""
 
     rtdata = rtdata_module
@@ -93,22 +91,9 @@ def run_tso3_pipeline(rtdata_module, resource_tracker):
     # Run the calwebb_tso3 pipeline
     args = ["calwebb_tso3", rtdata.input]
 
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
     return rtdata
-
-
-def test_log_tracked_resources_spec2(log_tracked_resources, run_tso_spec2_pipeline):
-    log_tracked_resources()
-
-
-def test_log_tracked_resources_pixrep(log_tracked_resources, run_tso_spec2_pixrep):
-    log_tracked_resources()
-
-
-def test_log_tracked_resources_tso3(log_tracked_resources, run_tso3_pipeline):
-    log_tracked_resources()
 
 
 @pytest.mark.parametrize(

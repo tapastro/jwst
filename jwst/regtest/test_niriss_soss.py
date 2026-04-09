@@ -41,7 +41,7 @@ def run_tso_spec2(rtdata_module):
 
 
 @pytest.fixture(scope="module")
-def run_tso_spec3(rtdata_module, run_tso_spec2, resource_tracker):
+def run_tso_spec3(rtdata_module, run_tso_spec2):
     """Run stage 3 pipeline on NIRISS SOSS data."""
     rtdata = rtdata_module
     # Get the level3 association json file (though not its members) and run
@@ -52,12 +52,11 @@ def run_tso_spec3(rtdata_module, run_tso_spec2, resource_tracker):
         rtdata.input,
         "--steps.extract_1d.soss_rtol=1.e-3",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
 
 @pytest.fixture(scope="module")
-def run_atoca_extras(rtdata_module, resource_tracker):
+def run_atoca_extras(rtdata_module):
     """Run stage 2 pipeline on NIRISS SOSS data using enhanced modes via parameter settings."""
     rtdata = rtdata_module
 
@@ -73,16 +72,7 @@ def run_atoca_extras(rtdata_module, resource_tracker):
         "--steps.extract_1d.soss_bad_pix=model",
         "--steps.extract_1d.soss_rtol=1.e-3",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
-
-
-def test_log_tracked_resources_spec2(log_tracked_resources, run_atoca_extras):
-    log_tracked_resources()
-
-
-def test_log_tracked_resources_spec3(log_tracked_resources, run_tso_spec3):
-    log_tracked_resources()
+    Step.from_cmdline(args)
 
 
 @pytest.mark.parametrize("suffix", ["calints", "flat_field", "srctype", "x1dints"])

@@ -22,7 +22,7 @@ def run_tso_spec2(rtdata_module):
 
 
 @pytest.fixture(scope="module")
-def run_tso_tso3(rtdata_module, run_tso_spec2, resource_tracker):
+def run_tso_tso3(rtdata_module, run_tso_spec2):
     """Run stage 3 pipeline on NIRISS SOSS TSO data with FULL subarray."""
     rtdata = rtdata_module
 
@@ -33,8 +33,7 @@ def run_tso_tso3(rtdata_module, run_tso_spec2, resource_tracker):
         "calwebb_tso3",
         rtdata.input,
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
 
 def test_niriss_soss_tso_stage2(rtdata_module, run_tso_spec2, fitsdiff_default_kwargs):

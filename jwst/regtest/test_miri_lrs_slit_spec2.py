@@ -13,7 +13,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_pipeline(rtdata_module, resource_tracker):
+def run_pipeline(rtdata_module):
     """Run the calwebb_spec2 pipeline on an ASN of nodded MIRI LRS
     fixedslit exposures."""
     rtdata = rtdata_module
@@ -36,12 +36,7 @@ def run_pipeline(rtdata_module, resource_tracker):
         "--steps.bkg_subtract.save_results=true",
         "--steps.bkg_subtract.save_combined_background=true",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
-
-
-def test_log_tracked_resources_spec2(log_tracked_resources, run_pipeline):
-    log_tracked_resources()
+    Step.from_cmdline(args)
 
 
 @pytest.mark.parametrize(

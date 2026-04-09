@@ -11,21 +11,16 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_pipeline(rtdata_module, resource_tracker):
+def run_pipeline(rtdata_module):
     """Run calwebb_spec3 on NIRSpec MOS data."""
     rtdata = rtdata_module
     rtdata.get_asn("nirspec/mos/jw01345-o066_20230831t181155_spec3_00002_asn.json")
 
     # Run the calwebb_spec3 pipeline on the association
     args = ["calwebb_spec3", rtdata.input]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
     return rtdata
-
-
-def test_log_tracked_resources(log_tracked_resources, run_pipeline):
-    log_tracked_resources()
 
 
 @pytest.mark.parametrize("suffix", ["cal", "crf", "s2d", "x1d"])

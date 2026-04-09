@@ -8,7 +8,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_pipelines(rtdata_module, resource_tracker):
+def run_pipelines(rtdata_module):
     """Run stage 2 and 3 pipelines on MIRI TSO image data."""
 
     rtdata = rtdata_module
@@ -37,14 +37,9 @@ def run_pipelines(rtdata_module, resource_tracker):
     # the tso3 pipeline on all _calints files listed in association
     rtdata.get_data("miri/image/jw01177-o007_tso3_00001_asn.json")
     args = ["calwebb_tso3", rtdata.input]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
     return rtdata
-
-
-def test_log_tracked_resources_miri_image_tso(log_tracked_resources, run_pipelines):
-    log_tracked_resources()
 
 
 @pytest.mark.parametrize("segment", ["seg001", "seg002"])

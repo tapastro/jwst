@@ -16,7 +16,7 @@ pytestmark = [pytest.mark.bigdata, pytest.mark.slow]
 
 
 @pytest.fixture(scope="module")
-def run_spec3_ifushort(rtdata_module, resource_tracker):
+def run_spec3_ifushort(rtdata_module):
     """Run the Spec3Pipeline on association with 2 bands on IFUSHORT"""
 
     # Test has bands medium and long for IFUSHORT
@@ -31,13 +31,12 @@ def run_spec3_ifushort(rtdata_module, resource_tracker):
         "--steps.cube_build.save_results=true",
         "--steps.extract_1d.save_results=true",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
     return rtdata
 
 
 @pytest.fixture(scope="module")
-def run_spec3_ifulong(rtdata_module, resource_tracker):
+def run_spec3_ifulong(rtdata_module):
     """Run the Spec3Pipeline dithered flight data"""
 
     # Test has bands medium and long for IFULONG
@@ -51,8 +50,7 @@ def run_spec3_ifulong(rtdata_module, resource_tracker):
         "--steps.cube_build.save_results=true",
         "--steps.extract_1d.save_results=true",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
     return rtdata
 
 
@@ -99,14 +97,6 @@ def run_spec3_ifushort_extract1d(rtdata_module):
     ]
     Step.from_cmdline(args)
     return rtdata
-
-
-def test_log_tracked_resources_spec3short(log_tracked_resources, run_spec3_ifushort):
-    log_tracked_resources()
-
-
-def test_log_tracked_resources_spec3long(log_tracked_resources, run_spec3_ifulong):
-    log_tracked_resources()
 
 
 @pytest.mark.parametrize(

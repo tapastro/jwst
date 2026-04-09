@@ -14,7 +14,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_spec2(rtdata_module, resource_tracker):
+def run_spec2(rtdata_module):
     """Run the Spec2Pipeline on a spec2 ASN containing a single exposure"""
     rtdata = rtdata_module
 
@@ -35,13 +35,12 @@ def run_spec2(rtdata_module, resource_tracker):
         ],
     }
 
-    with resource_tracker.track():
-        rtdata = rt.run_step_from_dict(rtdata, **step_params)
+    rtdata = rt.run_step_from_dict(rtdata, **step_params)
     return rtdata
 
 
 @pytest.fixture(scope="module")
-def run_spec2_nsclean(rtdata_module, resource_tracker):
+def run_spec2_nsclean(rtdata_module):
     """Run the Spec2Pipeline with nsclean (via clean_flicker_noise)."""
     rtdata = rtdata_module
 
@@ -66,11 +65,6 @@ def run_spec2_nsclean(rtdata_module, resource_tracker):
 
     rtdata = rt.run_step_from_dict(rtdata, **step_params)
     return rtdata
-
-
-@pytest.mark.slow
-def test_log_tracked_resources_spec2(log_tracked_resources, run_spec2):
-    log_tracked_resources()
 
 
 @pytest.mark.slow

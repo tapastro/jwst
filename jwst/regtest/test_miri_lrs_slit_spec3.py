@@ -17,7 +17,7 @@ pytestmark = [pytest.mark.bigdata]
 @pytest.fixture(
     scope="module", params=["default_wcs", "user_wcs", "user_wcs+shape", "user_wcs+shape1"]
 )
-def run_pipeline(rtdata_module, request, resource_tracker):
+def run_pipeline(rtdata_module, request):
     """
     Run the calwebb_spec3 pipeline on an ASN of nodded MIRI LRS
     fixed-slit exposures using different options for the WCS and output
@@ -73,12 +73,7 @@ def run_pipeline(rtdata_module, request, resource_tracker):
         args.append(f"--steps.resample_spec.output_file={output_file}")
 
     # Run the calwebb_spec3 pipeline; save results from intermediate steps
-    with resource_tracker.track():
-        Step.from_cmdline(args)
-
-
-def test_log_tracked_resources_spec3(log_tracked_resources, run_pipeline):
-    log_tracked_resources()
+    Step.from_cmdline(args)
 
 
 @pytest.mark.parametrize("suffix", ["s2d", "x1d"])

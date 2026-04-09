@@ -9,7 +9,7 @@ pytestmark = [pytest.mark.bigdata, pytest.mark.slow]
 
 
 @pytest.fixture(scope="module")
-def run_spec3_multi(rtdata_module, resource_tracker):
+def run_spec3_multi(rtdata_module):
     """Run Spec3Pipeline"""
     rtdata = rtdata_module
 
@@ -25,13 +25,8 @@ def run_spec3_multi(rtdata_module, resource_tracker):
             "--steps.combine_1d.save_results=true",
         },
     }
-    with resource_tracker.track():
-        rtdata = rt.run_step_from_dict(rtdata, **step_params)
+    rtdata = rt.run_step_from_dict(rtdata, **step_params)
     return rtdata
-
-
-def test_log_tracked_resources_spec3(log_tracked_resources, run_spec3_multi):
-    log_tracked_resources()
 
 
 @pytest.mark.parametrize(

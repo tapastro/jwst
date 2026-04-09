@@ -13,7 +13,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_pipeline(rtdata_module, resource_tracker):
+def run_pipeline(rtdata_module):
     """
     Run the calwebb_spec3 pipeline on NIRSpec Fixed-Slit exposures.
     """
@@ -31,12 +31,7 @@ def run_pipeline(rtdata_module, resource_tracker):
         "--steps.resample_spec.save_results=true",
         "--steps.extract_1d.save_results=true",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
-
-
-def test_log_tracked_resources_spec3(log_tracked_resources, run_pipeline):
-    log_tracked_resources()
+    Step.from_cmdline(args)
 
 
 @pytest.mark.parametrize("suffix", ["cal", "crf", "s2d", "x1d", "median"])

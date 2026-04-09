@@ -8,7 +8,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_detector1(rtdata_module, resource_tracker):
+def run_detector1(rtdata_module):
     """Run calwebb_detector1 on NIRISS SOSS superstripe data."""
     rtdata = rtdata_module
     rtdata.get_data("niriss/soss/jw07073021001_04102_00001-seg001_nis_SUB680STRIPE_SOSS_uncal.fits")
@@ -26,12 +26,7 @@ def run_detector1(rtdata_module, resource_tracker):
         "--steps.jump.save_results=True",
         "--save_calibrated_ramp=True",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
-
-
-def test_log_tracked_resources_det1(log_tracked_resources, run_detector1):
-    log_tracked_resources()
+    Step.from_cmdline(args)
 
 
 @pytest.mark.parametrize(

@@ -84,7 +84,7 @@ def run_detector1_multiprocess_jump(rtdata_module):
 
 
 @pytest.fixture(scope="module")
-def run_detector1_with_average_dark_current(rtdata_module, resource_tracker):
+def run_detector1_with_average_dark_current(rtdata_module):
     """Run detector1 pipeline on MIRI imaging data, providing an
     estimate of the average dark current for inclusion in ramp_fitting
     poisson variance estimation."""
@@ -99,8 +99,7 @@ def run_detector1_with_average_dark_current(rtdata_module, resource_tracker):
         "--steps.dark_current.save_results=True",
         "--steps.dark_current.average_dark_current=1.0",
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
 
 @pytest.fixture(scope="module")
@@ -127,7 +126,7 @@ def run_detector1_with_clean_flicker_noise(rtdata_module):
 
 
 @pytest.fixture(scope="module")
-def run_image2(run_detector1, rtdata_module, resource_tracker):
+def run_image2(run_detector1, rtdata_module):
     """Run image2 pipeline on the _rate file, saving intermediate products"""
     rtdata = rtdata_module
     rtdata.input = "jw01024001001_04101_00001_mirimage_rate.fits"
@@ -151,15 +150,14 @@ def run_image2(run_detector1, rtdata_module, resource_tracker):
             "miri/image/jw01024001001_04101_00003_mirimage_rate.fits",
             "miri/image/jw01024001001_04101_00004_mirimage_rate.fits",
         ]
-        with resource_tracker.track():
-            for rate_file in rate_files:
-                rtdata.get_data(rate_file)
-                args = ["jwst.pipeline.Image2Pipeline", rtdata.input, "--steps.resample.skip=True"]
-                Step.from_cmdline(args)
+        for rate_file in rate_files:
+            rtdata.get_data(rate_file)
+            args = ["jwst.pipeline.Image2Pipeline", rtdata.input, "--steps.resample.skip=True"]
+            Step.from_cmdline(args)
 
 
 @pytest.fixture(scope="module")
-def run_image3(run_image2, rtdata_module, resource_tracker):
+def run_image3(run_image2, rtdata_module):
     """Get the level3 association json file (though not its members) and run
     image3 pipeline on all _cal files listed in association"""
     rtdata = rtdata_module
@@ -169,20 +167,7 @@ def run_image3(run_image2, rtdata_module, resource_tracker):
         warnings.filterwarnings(
             "ignore", message="Failed to achieve requested SIP approximation accuracy"
         )
-        with resource_tracker.track():
-            Step.from_cmdline(args)
-
-
-def test_log_tracked_resources_det1(log_tracked_resources, run_detector1_with_average_dark_current):
-    log_tracked_resources()
-
-
-def test_log_tracked_resources_image2(log_tracked_resources, run_image2):
-    log_tracked_resources()
-
-
-def test_log_tracked_resources_image3(log_tracked_resources, run_image3):
-    log_tracked_resources()
+        Step.from_cmdline(args)
 
 
 @pytest.mark.parametrize(

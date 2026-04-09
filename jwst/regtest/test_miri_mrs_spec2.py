@@ -48,7 +48,7 @@ def run_spec2(rtdata_module):
 
 
 @pytest.fixture(scope="module")
-def run_spec2_with_residual_fringe(rtdata_module, resource_tracker):
+def run_spec2_with_residual_fringe(rtdata_module):
     """Run the Spec2Pipeline on a single exposure"""
     rtdata = rtdata_module
 
@@ -64,12 +64,7 @@ def run_spec2_with_residual_fringe(rtdata_module, resource_tracker):
         "--steps.residual_fringe.save_results=true",
     ]
 
-    with resource_tracker.track():
-        Step.from_cmdline(args)
-
-
-def test_log_tracked_resources_spec2(log_tracked_resources, run_spec2_with_residual_fringe):
-    log_tracked_resources()
+    Step.from_cmdline(args)
 
 
 @pytest.mark.parametrize(

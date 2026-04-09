@@ -8,7 +8,7 @@ pytestmark = [pytest.mark.bigdata]
 
 
 @pytest.fixture(scope="module")
-def run_pipeline(rtdata_module, resource_tracker):
+def run_pipeline(rtdata_module):
     """Run calwebb_coron3 on MIRI 4QPM coronographic data."""
     rtdata = rtdata_module
     rtdata.get_asn("miri/coron/jw01386-c1002_20230109t015044_coron3_00001_asn.json")
@@ -18,14 +18,9 @@ def run_pipeline(rtdata_module, resource_tracker):
         "calwebb_coron3",
         rtdata.input,
     ]
-    with resource_tracker.track():
-        Step.from_cmdline(args)
+    Step.from_cmdline(args)
 
     return rtdata
-
-
-def test_log_tracked_resources_coron3(log_tracked_resources, run_pipeline):
-    log_tracked_resources()
 
 
 @pytest.mark.parametrize("suffix", ["crfints", "psfalign", "psfsub"])
