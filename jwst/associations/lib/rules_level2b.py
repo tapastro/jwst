@@ -241,8 +241,8 @@ class Asn_Lv2ImageTSO(AsnMixin_Lv2Image, DMSLevel2bBase):
 
     Characteristics:
 
-    - Association type: ``tso-image2``
-    - Pipeline: ``calwebb_tso-image2``
+    - Association type: ``image2``
+    - Pipeline: ``calwebb_image2``
     - Image-based Time Series exposures
     - Single science exposure
     """
@@ -265,7 +265,7 @@ class Asn_Lv2ImageTSO(AsnMixin_Lv2Image, DMSLevel2bBase):
     def _init_hook(self, item):
         """Post-check and pre-add initialization."""
         super(Asn_Lv2ImageTSO, self)._init_hook(item)
-        self.data["asn_type"] = "tso-image2"
+        self.data["asn_type"] = "image2"
 
 
 @RegistryMarker.rule
@@ -470,8 +470,8 @@ class Asn_Lv2SpecTSO(AsnMixin_Lv2Spectral, DMSLevel2bBase):
 
     Characteristics:
 
-    - Association type: ``tso-spec2``
-    - Pipeline: ``calwebb_tso-spec2``
+    - Association type: ``spec2``
+    - Pipeline: ``calwebb_spec2``
     - Spectral-based single target time series exposures
     - Single science exposure
     - No other exposure can be part of the association
@@ -575,7 +575,7 @@ class Asn_Lv2SpecTSO(AsnMixin_Lv2Spectral, DMSLevel2bBase):
     def _init_hook(self, item):
         """Post-check and pre-add initialization."""
         super(Asn_Lv2SpecTSO, self)._init_hook(item)
-        self.data["asn_type"] = "tso-spec2"
+        self.data["asn_type"] = "spec2"
 
 
 @RegistryMarker.rule
@@ -806,8 +806,8 @@ class Asn_Lv2NRSLAMPSpectral(AsnMixin_Lv2Special, DMSLevel2bBase):
 
     Characteristics:
 
-    - Association type: ``nrslamp-spec2``
-    - Pipeline: ``calwebb_nrslamp-spec2``
+    - Association type: ``spec2``
+    - Pipeline: ``calwebb_spec2``
     - Spectral-based calibration exposures
     - Single science exposure
     """
@@ -865,7 +865,7 @@ class Asn_Lv2NRSLAMPSpectral(AsnMixin_Lv2Special, DMSLevel2bBase):
     def _init_hook(self, item):
         """Post-check and pre-add initialization."""
         super(Asn_Lv2NRSLAMPSpectral, self)._init_hook(item)
-        self.data["asn_type"] = "nrslamp-spec2"
+        self.data["asn_type"] = "spec2"
 
 
 @RegistryMarker.rule
@@ -1252,7 +1252,7 @@ class Asn_Lv2WFSC(DMSLevel2bBase):
     Characteristics:
 
     - Association type: ``image2``
-    - Pipeline: ``calwebb_wfs-image2``
+    - Pipeline: ``calwebb_image2``
     - WFS and WFS&C observations
     - Single science exposure
     """
